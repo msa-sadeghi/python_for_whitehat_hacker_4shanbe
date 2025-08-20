@@ -12,7 +12,8 @@ def test_login(username, password_list):
             "password": password
         }
         response  = requests.post(url, data=data)
-        if "captcha" in response.text:
+        print("----------", "CAPTCHA" in response.text)
+        if "CAPTCHA" in response.text:
             print(f"captcha created ")
             time.sleep(4)
             continue
