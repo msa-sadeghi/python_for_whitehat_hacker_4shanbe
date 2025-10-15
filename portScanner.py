@@ -31,9 +31,22 @@ class PortScanner:
             if result == 0:
                 try:
                     sock.send(b'Hello')
-                    banner = sock.recv(1024).decode().stript()
+                    banner = sock.recv(1024).decode().stript() 
                 except:
                     banner = ""
+                service = self.COMMON_PORTS[port]
+                self.open_ports.append(
+                    {
+                        'port':port,
+                        'service': service,
+                        'banner' :  banner
+                    }
+                )
+                print(f"port {port}  | {service} | {banner}")
+
+            sock.close()
+        except Exception as e:
+            pass
 
 
 
