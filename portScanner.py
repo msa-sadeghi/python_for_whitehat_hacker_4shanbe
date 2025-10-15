@@ -23,6 +23,30 @@ class PortScanner:
         self.num_threads = num_threads
         self.open_ports = []
 
+    def scan(self, start_port = 1, end_port = 1024):
+        queue = Queue()
+
+        threads = []
+        for i in range(self.num_threads):
+            thread = threading.Thread(target=self.worker, args=(queue,))
+            thread.daemon = True
+            thread.start()
+            threads.append(thread)
+        for port in range(start_port, end_port + 1):
+            queue.put(port)
+        queue.join()
+
+        ## TODO stop thread
+
+        
+    def worker(self, queue):
+        while True:
+            port = queue.get()
+            if port is None:
+                break
+            self.scan_port(port)
+            queue.task_done()
+
     def scan_port(self, port):
         try:
             sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
