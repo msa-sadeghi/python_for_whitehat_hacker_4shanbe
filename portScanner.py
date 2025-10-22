@@ -36,7 +36,12 @@ class PortScanner:
             queue.put(port)
         queue.join()
 
-        ## TODO stop thread
+        for i in range(self.num_threads):
+            queue.put(None)
+        for thread in threads:
+            thread.join()
+
+        return self.open_ports
 
         
     def worker(self, queue):
@@ -78,3 +83,7 @@ class PortScanner:
 
 
 
+target = input("enter target ip: ")
+scanner = PortScanner(target, timeout=1, num_threads=100)
+open_ports = scanner.scan()
+print(open_ports)
